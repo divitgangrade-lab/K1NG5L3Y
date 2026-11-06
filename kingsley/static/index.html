@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#04060b" />
+<title>K1NG5L3Y // operator console</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2304060b'/><text x='5' y='23' font-size='20' fill='%2300f0ff' font-family='monospace'>K</text></svg>" />
+</head>
+<body>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<header class="hud">
+  <div class="brand">
+    <h1 class="glitch" data-text="K1NG5L3Y">K1NG5L3Y</h1>
+    <p class="brand-sub">// local operator console <span class="dim">v0.1</span></p>
+  </div>
+  <div class="chips">
+    <span class="chip" id="linkChip"><i class="dot" id="linkDot"></i><b>LINK</b> <span id="linkText">probing</span></span>
+    <span class="chip" id="modelChip"><b>MODEL</b> <span id="modelText">—</span></span>
+    <span class="chip" id="googleChip"><b>GOOGLE</b> <span id="googleText">—</span></span>
+    <span class="chip" id="listenChip"><b>MIC</b> <span id="listenText">idle</span></span>
+    <span class="chip clock" id="clock">--:--:--</span>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="sections">
+    <button class="nav-item active" data-view="console"><span>▣</span>CONSOLE</button>
+    <button class="nav-item" data-view="tasks"><span>◈</span>TASKS</button>
+    <button class="nav-item" data-view="intel"><span>✷</span>INTEL</button>
+    <button class="nav-item" data-view="repo"><span>⌥</span>REPO</button>
+    <button class="nav-item" data-view="vision"><span>◉</span>VISION</button>
+    <button class="nav-item" data-view="audio"><span>◍</span>AUDIO</button>
+    <button class="nav-item" data-view="sensors"><span>▤</span>SENSORS</button>
+    <button class="nav-item" data-view="link"><span>⚡</span>LINK</button>
+    <div class="rail-foot">
+      <span class="dim">routing</span>
+      <span id="routeText">task-aware</span>
+    </div>
+  </nav>
+
+  <main class="views">
+    <!-- CONSOLE ------------------------------------------------------------ -->
+    <section class="view active" id="view-console">
+      <div class="panel grow">
+        <div class="panel-head">
+          <h2>// CONSOLE</h2>
+          <div class="row gap">
+            <select id="taskSelect" title="task routing">
+              <option value="default">auto route</option>
+              <option value="code">code → claude</option>
+              <option value="news">news → grok</option>
+              <option value="google">google → gemini</option>
+              <option value="ideas">ideas → chatgpt</option>
+              <option value="homework">homework</option>
+              <option value="fast">fast / free</option>
+            </select>
+            <select id="providerSelect" title="force provider"><option value="">auto</option></select>
+          </div>
+        </div>
+        <div class="chat-log" id="chatLog"></div>
+        <div class="composer">
+          <textarea id="chatInput" rows="2" placeholder="talk to kingsley — 'plan my day', 'explain this bug', 'summarise unread mail'"></textarea>
+          <button class="btn primary" id="sendBtn">TRANSMIT</button>
+        </div>
+        <p class="hint" id="consoleHint">No model keys detected. Add a key in <b>LINK</b>, or run FreeLLMAPI locally on :3001 for free routing.</p>
+      </div>
+    </section>
+
+    <!-- TASKS -------------------------------------------------------------- -->
+    <section class="view" id="view-tasks">
+      <div class="panel grow">
+        <div class="panel-head">
+          <h2>// TASK GRID</h2>
+          <div class="row gap">
+            <button class="btn" id="triageBtn">TRIAGE GMAIL</button>
+            <button class="btn" id="organiseBtn">AUTO-ORDER</button>
+            <button class="btn" id="syncCalBtn">SYNC CALENDAR</button>
+          </div>
+        </div>
+        <div class="task-form">
+          <input id="taskTitle" placeholder="task title" />
+          <input id="taskDue" type="date" title="due date" />
+          <select id="taskPriority">
+            <option value="high">high</option>
+            <option value="normal" selected>normal</option>
+            <option value="low">low</option>
+          </select>
+          <button class="btn primary" id="addTaskBtn">ADD</button>
+        </div>
+        <div class="task-list" id="taskList"></div>
+        <p class="hint" id="taskHint">Tasks with a due date can be pushed into Google Calendar as scheduled blocks.</p>
+      </div>
+    </section>
+
+    <!-- INTEL -------------------------------------------------------------- -->
+    <section class="view" id="view-intel">
+      <div class="panel grow">
+        <div class="panel-head">
+          <h2>// INTEREST SCOUT</h2>
+          <button class="btn primary" id="scoutBtn">RUN SCOUT</button>
+        </div>
+        <input id="interestsInput" placeholder="interests, comma separated — e.g. local llm inference, rust, f1" />
+        <div class="split">
+          <pre class="out" id="intelOut">no briefing yet. run the scout to pull fresh signal on your interests.</pre>
+          <div class="side">
+            <h3>SOURCES</h3>
+            <ul class="sources" id="sourcesOut"></ul>
+            <h3>ARCHIVE</h3>
+            <ul class="sources" id="intelArchive"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPO --------------------------------------------------------------- -->
+    <section class="view" id="view-repo">
+      <div class="panel grow">
+        <div class="panel-head">
+          <h2>// REPOSITORY</h2>
+          <div class="row gap">
+            <button class="btn" id="gitStatusBtn">GIT STATUS</button>
+            <button class="btn" id="gitDiffBtn">DIFF STAT</button>
+            <button class="btn" id="gitLogBtn">LOG</button>
+          </div>
+        </div>
+        <div class="split repo-split">
+          <div class="tree" id="repoTree"></div>
+          <div class="side grow">
+            <div class="file-head"><span id="filePath" class="dim">select a file</span></div>
+            <pre class="out file-view" id="fileView">← pick a file from the tree</pre>
+          </div>
+        </div>
+        <div class="agent-bar">
+          <input id="repoInstruction" placeholder="instruct the repo agent — 'add a health endpoint with uptime', 'fix the failing test in …'" />
+          <button class="btn primary" id="repoAgentBtn">PROPOSE</button>
+        </div>
+        <div class="approvals" id="approvals"></div>
+        <pre class="out small" id="gitOut"></pre>
+      </div>
+    </section>
+
+    <!-- VISION ------------------------------------------------------------- -->
+    <section class="view" id="view-vision">
+      <div class="panel grow">
+        <div class="panel-head">
+          <h2>// SCREEN LINK</h2>
+          <div class="row gap">
+            <button class="btn" id="shareBtn">SHARE SCREEN</button>
+            <button class="btn primary" id="analyseBtn">ANALYSE FRAME</button>
+          </div>
+        </div>
+        <div class="vision-wrap">
+          <video id="visionVideo" autoplay muted playsinline></video>
+          <div class="vision-empty" id="visionEmpty">no screen shared — click SHARE SCREEN and pick a window</div>
+        </div>
+        <input id="visionQuestion" placeholder="question about the screen (optional)" />
+        <pre class="out" id="visionOut"></pre>
+      </div>
+    </section>
+
+    <!-- AUDIO -------------------------------------------------------------- -->
+    <section class="view" id="view-audio">
+      <div class="panel grow">
+        <div class="panel-head">
+          <h2>// AMBIENT LISTENING</h2>
+          <div class="row gap">
+            <button class="btn primary" id="listenBtn">START LISTENING</button>
+            <span class="hint inline" id="listenState">mic idle</span>
+          </div>
+        </div>
+        <p class="hint">
+          Uses the browser's on-device speech recognition while this tab is open. Say <b>“Kingsley”</b> to
+          wake it; <b>“Kingsley add task …”</b> creates a task without touching a model. Nothing is sent to a
+          third party for transcription beyond the browser engine itself.
+        </p>
+        <div class="composer">
+          <input id="manualText" placeholder="type a line to inject into the transcript" />
+          <button class="btn" id="manualSend">INJECT</button>
+        </div>
+        <div class="transcript" id="transcriptLog"></div>
+      </div>
+    </section>
+
+    <!-- SENSORS ------------------------------------------------------------ -->
+    <section class="view" id="view-sensors">
+      <div class="panel grow">
+        <div class="panel-head"><h2>// DIAGNOSTICS</h2><span class="hint inline" id="sensorStamp">—</span></div>
+        <div class="sensor-grid" id="sensors"></div>
+        <div class="panel-head sub"><h2>// PROVIDER MATRIX</h2></div>
+        <div class="table-wrap"><table class="matrix" id="providerTable"></table></div>
+      </div>
+    </section>
+
+    <!-- LINK --------------------------------------------------------------- -->
+    <section class="view" id="view-link">
+      <div class="panel grow">
+        <div class="panel-head"><h2>// LINK STATE</h2><button class="btn" id="saveApi">SAVE ENDPOINT</button></div>
+        <label class="field"><span>API endpoint (blank = same origin)</span>
+          <input id="apiEndpoint" placeholder="http://127.0.0.1:3000" />
+        </label>
+        <div class="link-grid">
+          <div>
+            <h3>GOOGLE</h3>
+            <p class="hint" id="googleState">checking…</p>
+            <button class="btn primary" id="googleConnectBtn">CONNECT GOOGLE</button>
+            <p class="hint">Needs <code>GOOGLE_CLIENT_ID</code> + <code>GOOGLE_CLIENT_SECRET</code> in the
+            backend environment, with the redirect URI registered in Google Cloud Console.</p>
+          </div>
+          <div>
+            <h3>ENVIRONMENT</h3>
+            <ul class="env" id="envList"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="rail-right">
+    <div class="panel">
+      <div class="panel-head tight"><h2>// TELEMETRY</h2></div>
+      <div class="metrics" id="diagBars"></div>
+      <div class="counters">
+        <div><b id="statTasks">0</b><span>tasks</span></div>
+        <div><b id="statApprovals">0</b><span>patches</span></div>
+        <div><b id="statTranscripts">0</b><span>lines</span></div>
+        <div><b id="statUptime">0s</b><span>uptime</span></div>
+      </div>
+    </div>
+    <div class="panel grow">
+      <div class="panel-head tight"><h2>// EVENT STREAM</h2><i class="dot live" id="streamDot"></i></div>
+      <div class="feed" id="eventFeed"></div>
+    </div>
+  </aside>
+</div>
+
+<footer class="ticker"><div id="ticker">KINGSLEY ONLINE // MODEL ROUTER ARMED // SAY “KINGSLEY” TO WAKE // </div></footer>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

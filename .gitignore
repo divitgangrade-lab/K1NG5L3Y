@@ -134,3 +134,7 @@ oj-debug.*.json
 
 # Kingsley runtime state
 .kingsley/
+
+# standalone export of the Kingsley repo
+K.1.N.G.5.L.3.Y/
+*.bundle
